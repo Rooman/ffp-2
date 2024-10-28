@@ -38,7 +38,7 @@ function App() {
     return (
         <div className={'min-h-[100vh] bg-[#221d37] w-full flex justify-center'}>
             <div className={"min-h-[100vh] mx-auto outline outline-[#4D4D9F] min-w-80 p-4 w-full max-w-[500px]"} style={{
-                backgroundImage: 'url(/bg.png)',
+                backgroundImage: 'url(bg.png)',
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
             }}>
@@ -94,11 +94,11 @@ function App() {
 
                 <Row>
                     <Column>
-                        <Label>M-cover owners</Label>
+                        <Label>Medicover owners</Label>
                         <Input value={mCoverOwners} onChange={(e) => setMCoverOwners(e.target.value)}/>
                     </Column>
                     <Column>
-                        <Label>M-cover usage</Label>
+                        <Label>Medicover usage</Label>
                         <Input value={mCoverUsage} onChange={(e) => setMCoverUsage(e.target.value)}/>
                     </Column>
                 </Row>
@@ -109,7 +109,7 @@ function App() {
                         <Input value={msOwners} onChange={(e) => setMSOwners(e.target.value)}/>
                     </Column>
                     <Column>
-                        <Label>MS + MSC usage</Label>
+                        <Label>Multisport usage</Label>
                         <Input value={msUsage} onChange={(e) => setMSUsage(e.target.value)}/>
                     </Column>
                 </Row>
@@ -125,7 +125,7 @@ function App() {
                     </Column>
                 </Row>
 
-                <img className={'my-6'} src={divider} alt="divider"/>
+                <img className={'mt-2 mb-4'} src={divider} alt="divider"/>
 
                 <ResultsPanel statistics={statistics}/>
             </div>
@@ -135,7 +135,7 @@ function App() {
 
 const Row: FC<PropsWithChildren> = ({children}) => {
     return (
-        <div className={'flex gap-x-4 mt-4'}>
+        <div className={'flex gap-x-4 mb-4'}>
             {children}
         </div>
     )

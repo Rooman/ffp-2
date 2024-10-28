@@ -24,9 +24,6 @@ export interface Statistics {
 
 
 export function calculateStatistics(inputData: InputDataType): Statistics {
-    console.log('inputData', inputData);
-
-
     const discount = (inputData.medicoverCardUsages + inputData.msCardUsages) * 15;
 
     const total = inputData.courts * inputData.pricePerHour * inputData.hours;
@@ -38,6 +35,7 @@ export function calculateStatistics(inputData: InputDataType): Statistics {
     const fameDiscount = inputData.fameTotal > 0 ? priceAfterDiscount - inputData.fameTotal : 0;
 
     const realTotal = inputData.fameTotal > 0 ? priceAfterDiscount - fameDiscount : priceAfterDiscount;
+
 
     const noMs = (total - fameDiscount) / people;
 
@@ -56,7 +54,7 @@ export function calculateStatistics(inputData: InputDataType): Statistics {
         totalPrice: roundUp(total),
         discount: roundUp(discount),
         priceAfterDiscount: roundUp(realTotal),
-        fameDiscount: roundUp(inputData.fameTotal > 0 ? fameDiscount : 0),
+        fameDiscount: inputData.fameTotal > 0 ? String(fameDiscount) : '0',
         noMs: inputData.noCardOwners ?  roundUp(inputData.noCardOwners > 0 ? noMs : 0) : undefined,
         MS:  inputData.msOwners ? roundUp(msPrice) : undefined,
         medicover: inputData.medicoverOwners ? roundUp(medicoverPrice) : undefined,

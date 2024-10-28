@@ -14,7 +14,7 @@ export const ResultsPanel: FC<ResultsPanelProps> = ({statistics}) => {
         <ResultRow title={'Total w/o discount:'} value={statistics.totalPrice}/>
         <ResultRow title={'Card discount:'} value={statistics.discount}/>
         <ResultRow title={'Fame discount:'} value={statistics.fameDiscount}/>
-        <ResultRow title={'Total:'} value={statistics.priceAfterDiscount}/>
+        <ResultRow title={'To be paid:'} value={statistics.priceAfterDiscount}/>
     </>
 }
 
