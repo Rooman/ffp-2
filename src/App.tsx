@@ -6,6 +6,12 @@ import {ResultsPanel} from "@/components/ResultsPanel.component.tsx";
 import {calculateStatistics} from "@/calculation-service.ts";
 import {transformState} from "@/util.ts";
 
+function toNumberOrZero(value: string | null) {
+    if (!value || value === "") {
+        return 0;
+    }
+    return Number(value);
+}
 
 function App() {
 
@@ -14,13 +20,16 @@ function App() {
     const multisportClassicQuery = getQueryVariable('msc');
     const noCardQuery = getQueryVariable('nc');
 
-    const [courts, setCourts] = useState('1');
-    const [hours, setHours] = useState('1');
+    const courtCount = (toNumberOrZero(medicoverQuery) + toNumberOrZero(multisportQuery)
+        + toNumberOrZero(multisportClassicQuery) + toNumberOrZero(noCardQuery)) / 4;
+
+    const [courts, setCourts] = useState(String(courtCount.toFixed(0)));
+    const [hours, setHours] = useState('2');
     const [pricePerHour, setPricePerHour] = useState('80');
     const [fameTotal, setFameTotal] = useState('');
     const [mCoverOwners, setMCoverOwners] = useState(medicoverQuery || '');
-    const [msOwners, setMSOwners] = useState( multisportQuery || '');
-    const [msClassicOwners, setMSClassicOwners] = useState( multisportClassicQuery || '');
+    const [msOwners, setMSOwners] = useState(multisportQuery || '');
+    const [msClassicOwners, setMSClassicOwners] = useState(multisportClassicQuery || '');
     const [noCard, setNoCard] = useState(noCardQuery || '');
     const [mCoverUsage, setMCoverUsage] = useState('');
     const [msUsage, setMSUsage] = useState('');
@@ -42,11 +51,12 @@ function App() {
     );
     return (
         <div className={'min-h-[100vh] bg-[#221d37] w-full flex justify-center'}>
-            <div className={"min-h-[100vh] mx-auto outline outline-[#4D4D9F] min-w-80 p-4 w-full max-w-[500px]"} style={{
-                backgroundImage: 'url(bg.png)',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-            }}>
+            <div className={"min-h-[100vh] mx-auto outline outline-[#4D4D9F] min-w-80 p-4 w-full max-w-[500px]"}
+                 style={{
+                     backgroundImage: 'url(bg.png)',
+                     backgroundRepeat: 'no-repeat',
+                     backgroundSize: 'cover',
+                 }}>
                 <Row>
                     <Column>
                         <Label>Courts</Label>
@@ -164,16 +174,16 @@ const Column: FC<PropsWithChildren> = ({children}) => {
     )
 }
 
-function getQueryVariable(variable:string)
-{
+function getQueryVariable(variable: string) {
     const query = window.location.search.substring(1);
-    console.log(query)//"app=article&act=news_content&aid=160990"
+
     const vars = query.split("&");
-    console.log(vars) //[ 'app=article', 'act=news_content', 'aid=160990' ]
-    for (let i=0;i<vars.length;i++) {
+
+    for (let i = 0; i < vars.length; i++) {
         const pair = vars[i].split("=");
-        console.log(pair)//[ 'app', 'article' ][ 'act', 'news_content' ][ 'aid', '160990' ]
-        if(pair[0] == variable){return pair[1];}
+        if (pair[0] == variable) {
+            return pair[1];
+        }
     }
     return null;
 }
