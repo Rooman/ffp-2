@@ -7,16 +7,21 @@ import {calculateStatistics} from "@/calculation-service.ts";
 import {transformState} from "@/util.ts";
 
 
-
 function App() {
+
+    const medicoverQuery = getQueryVariable('mc');
+    const multisportQuery = getQueryVariable('ms');
+    const multisportClassicQuery = getQueryVariable('msc');
+    const noCardQuery = getQueryVariable('nc');
+
     const [courts, setCourts] = useState('1');
     const [hours, setHours] = useState('1');
     const [pricePerHour, setPricePerHour] = useState('80');
     const [fameTotal, setFameTotal] = useState('');
-    const [mCoverOwners, setMCoverOwners] = useState('');
-    const [msOwners, setMSOwners] = useState('');
-    const [msClassicOwners, setMSClassicOwners] = useState('');
-    const [noCard, setNoCard] = useState('');
+    const [mCoverOwners, setMCoverOwners] = useState(medicoverQuery || '');
+    const [msOwners, setMSOwners] = useState( multisportQuery || '');
+    const [msClassicOwners, setMSClassicOwners] = useState( multisportClassicQuery || '');
+    const [noCard, setNoCard] = useState(noCardQuery || '');
     const [mCoverUsage, setMCoverUsage] = useState('');
     const [msUsage, setMSUsage] = useState('');
 
@@ -157,6 +162,20 @@ const Column: FC<PropsWithChildren> = ({children}) => {
             {children}
         </div>
     )
+}
+
+function getQueryVariable(variable:string)
+{
+    const query = window.location.search.substring(1);
+    console.log(query)//"app=article&act=news_content&aid=160990"
+    const vars = query.split("&");
+    console.log(vars) //[ 'app=article', 'act=news_content', 'aid=160990' ]
+    for (let i=0;i<vars.length;i++) {
+        const pair = vars[i].split("=");
+        console.log(pair)//[ 'app', 'article' ][ 'act', 'news_content' ][ 'aid', '160990' ]
+        if(pair[0] == variable){return pair[1];}
+    }
+    return null;
 }
 
 export default App

@@ -37,24 +37,38 @@ export function calculateStatistics(inputData: InputDataType): Statistics {
     const realTotal = inputData.fameTotal > 0 ? priceAfterDiscount - fameDiscount : priceAfterDiscount;
 
 
-    const noMs = (total - fameDiscount) / people;
+    let noMs = (total - fameDiscount) / people;
 
     const medicoverDiscaunt = inputData.medicoverCardUsages * 15;
     const medicoverPrice = inputData.medicoverOwners > 0 ? noMs - (medicoverDiscaunt / inputData.medicoverOwners) : 0;
 
+    let medicoverAdditionalDiscount = 0;
+    let msAdditionalDiscount = 0;
+
+    if(medicoverPrice < 0) {
+        medicoverAdditionalDiscount = (medicoverPrice * inputData.medicoverOwners) / (inputData.msOwners + inputData.msClassicOwners + inputData.noCardOwners);
+    }
+
+
     const totalMsDiscaunt = inputData.msCardUsages * 15;
-    const msDiscaunt = totalMsDiscaunt / (inputData.msOwners + inputData.msClassicOwners * msClassicDiscount(inputData.hours));
+    const msDiscaunt = totalMsDiscaunt / (inputData.msOwners + inputData.msClassicOwners * msClassicDiscount(inputData.hours)) ;
     const msClassicDiscaunt = msDiscaunt * msClassicDiscount(inputData.hours);
 
-    const msPrice = noMs - msDiscaunt;
-    const msClassicPrice = inputData.msClassicOwners > 0 ? noMs - msClassicDiscaunt : 0;
+    const msPrice = noMs - msDiscaunt + medicoverAdditionalDiscount;
+    if(msPrice < 0) {
+        msAdditionalDiscount = (msPrice * inputData.msOwners) / inputData.noCardOwners;
+    }
 
+
+    const msClassicPrice = inputData.msClassicOwners > 0 ? noMs - msClassicDiscaunt + medicoverAdditionalDiscount + msAdditionalDiscount : 0;
+
+    noMs += msAdditionalDiscount + medicoverAdditionalDiscount;
 
     return {
         totalPrice: roundUp(total),
         discount: roundUp(discount),
         priceAfterDiscount: roundUp(realTotal),
-        fameDiscount: inputData.fameTotal > 0 ? String(fameDiscount) : '0',
+        fameDiscount: inputData.fameTotal > 0 ? fameDiscount.toFixed(2) : '0.00',
         noMs: inputData.noCardOwners ?  roundUp(inputData.noCardOwners > 0 ? noMs : 0) : undefined,
         MS:  inputData.msOwners ? roundUp(msPrice) : undefined,
         medicover: inputData.medicoverOwners ? roundUp(medicoverPrice) : undefined,
