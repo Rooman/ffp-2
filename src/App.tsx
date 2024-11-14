@@ -20,10 +20,18 @@ function App() {
     const multisportClassicQuery = getQueryVariable('msc');
     const noCardQuery = getQueryVariable('nc');
 
-    const courtCount = (toNumberOrZero(medicoverQuery) + toNumberOrZero(multisportQuery)
-        + toNumberOrZero(multisportClassicQuery) + toNumberOrZero(noCardQuery)) / 4;
+    const playersCount = (toNumberOrZero(medicoverQuery) + toNumberOrZero(multisportQuery)
+        + toNumberOrZero(multisportClassicQuery) + toNumberOrZero(noCardQuery));
 
-    const [courts, setCourts] = useState(String(courtCount.toFixed(0)));
+    const courtCount = Math.ceil(playersCount / 4);
+
+    const defaultMedicoverUsage = toNumberOrZero(medicoverQuery) * 2;
+    const allowedMsUsage = courtCount * 2 * 2;
+    const possibleMSUsage = toNumberOrZero(multisportQuery) * 2 + toNumberOrZero(multisportClassicQuery);
+    const realMSUsage = Math.min(allowedMsUsage, possibleMSUsage);
+
+
+    const [courts, setCourts] = useState(String(courtCount));
     const [hours, setHours] = useState('2');
     const [pricePerHour, setPricePerHour] = useState('80');
     const [fameTotal, setFameTotal] = useState('');
@@ -31,8 +39,8 @@ function App() {
     const [msOwners, setMSOwners] = useState(multisportQuery || '');
     const [msClassicOwners, setMSClassicOwners] = useState(multisportClassicQuery || '');
     const [noCard, setNoCard] = useState(noCardQuery || '');
-    const [mCoverUsage, setMCoverUsage] = useState('');
-    const [msUsage, setMSUsage] = useState('');
+    const [mCoverUsage, setMCoverUsage] = useState(String(defaultMedicoverUsage));
+    const [msUsage, setMSUsage] = useState(String(realMSUsage));
 
 
     const statistics = calculateStatistics(
