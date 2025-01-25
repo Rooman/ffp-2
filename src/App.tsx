@@ -10,15 +10,29 @@ function toNumberOrZero(value: string | null) {
     if (!value || value === "") {
         return 0;
     }
+
+    if(value == 'undefined') {
+        return 0;
+    }
+
     return Number(value);
+}
+
+function fromUndefined(value:string|null) {
+    if(!value || value == 'undefined' ) {
+        return '0';
+    }
+
+    return value;
 }
 
 function App() {
 
-    const medicoverQuery = getQueryVariable('mc');
-    const multisportQuery = getQueryVariable('ms');
-    const multisportClassicQuery = getQueryVariable('msc');
-    const noCardQuery = getQueryVariable('nc');
+    const medicoverQuery = fromUndefined(getQueryVariable('mc'));
+    const multisportQuery = fromUndefined(getQueryVariable('ms'));
+    const multisportClassicQuery = fromUndefined(getQueryVariable('msc'));
+    const noCardQuery = fromUndefined(getQueryVariable('nc'));
+
 
     const playersCount = (toNumberOrZero(medicoverQuery) + toNumberOrZero(multisportQuery)
         + toNumberOrZero(multisportClassicQuery) + toNumberOrZero(noCardQuery));
@@ -33,7 +47,7 @@ function App() {
 
     const [courts, setCourts] = useState(String(courtCount));
     const [hours, setHours] = useState('2');
-    const [pricePerHour, setPricePerHour] = useState('80');
+    const [pricePerHour, setPricePerHour] = useState('75');
     const [fameTotal, setFameTotal] = useState('');
     const [mCoverOwners, setMCoverOwners] = useState(medicoverQuery || '');
     const [msOwners, setMSOwners] = useState(multisportQuery || '');
